@@ -1,5 +1,6 @@
 package dev.kaa4mil.fazewallet.command;
 
+import dev.kaa4mil.fazewallet.WalletPlugin;
 import dev.kaa4mil.fazewallet.config.MessageConfig;
 import dev.kaa4mil.fazewallet.user.UserManagerImpl;
 import dev.kaa4mil.fazewallet.util.WalletUtil;
@@ -17,14 +18,16 @@ public class WalletManageCommand extends Command {
 
     private static final String PERMISSION = "fazedev.wallet.admin";
 
+    private final WalletPlugin plugin;
     private final UserManagerImpl userManager;
     private final MessageConfig messageConfig;
 
     @Inject
-    public WalletManageCommand(@NotNull final UserManagerImpl userManager, @NotNull final MessageConfig messageConfig) {
+    public WalletManageCommand(@NotNull final WalletPlugin plugin, @NotNull final UserManagerImpl userManager, @NotNull final MessageConfig messageConfig) {
         super("adminwallet");
         this.setAliases(List.of("awallet", "walletadmin"));
 
+        this.plugin = plugin;
         this.messageConfig = messageConfig;
         this.userManager = userManager;
     }
@@ -34,6 +37,15 @@ public class WalletManageCommand extends Command {
         if(!sender.hasPermission(PERMISSION)) {
             WalletUtil.sendMessage(sender, "&cNie posiadasz uprawnienia: &4" + PERMISSION);
             return false;
+        }
+
+        if(args.length == 1 && args[0].equals("reload")) {
+            this.plugin.getWalletConfig().load();
+            this.plugin.getMessageConfig().load();
+            this.plugin.getCategoryConfig().load();
+
+            WalletUtil.sendMessage(sender, "&aPrzeladowano pomyslnie konfiguracje!");
+            return true;
         }
 
         if(args.length != 3) {
@@ -71,4 +83,12 @@ public class WalletManageCommand extends Command {
         return true;
     }
 
+    @NotNull
+    @Override
+    public List<String> tabComplete(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) throws IllegalArgumentException {
+        if(args.length == 1) {
+            return List.of("add", "remove", "set", "reload");
+        }
+        return List.of();
+    }
 }

@@ -23,7 +23,7 @@ public class MessageConfig extends OkaeriConfig {
     public String removeBalanceMessage = "&cZabrano &4{AMOUNT} &cz balansu gracza &4{PLAYER}";
     public String setBalanceMessage = "&aUstawiono balans gracza &2{PLAYER} &ana &2{AMOUNT}";
 
-    public String priceIsHigher = "&cNie stac cie na ten przedmiot, Brakuje ci: &4{PRICE} &c:(";
+    public String priceIsHigher = "&cNie stac cie na ten przedmiot, Brakuje ci: &4{PRICE}zl &c:(";
 
     public List<String> buyMessages = List.of("&7Gracz: &6{PLAYER} &7zakupil usluge: &e{SERVICE}", "&7Chcesz tez? &7Zrob zakupy pod &6/uslugi&7!");
 

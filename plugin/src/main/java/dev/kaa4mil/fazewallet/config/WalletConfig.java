@@ -37,14 +37,34 @@ public class WalletConfig extends OkaeriConfig {
     @Comment({"", "Lista produktow, dziala jesli kategorie sa wylaczone"})
     public List<Product> products = List.of(
             new Product(
-                    new ItemBuilder(Material.DIAMOND_BOOTS)
-                            .setName("&7Ranga: &9VIP")
-                            .setLore(List.of("&7Koszt: &b{PRICE}", "&aNacisnij lewym, aby zakupic range!"))
+                    new ItemBuilder(Material.GOLDEN_HELMET)
+                            .setName("&7Ranga: &e&lVIP")
+                            .setLore(List.of("", "&7Koszt uslugi: &e{PRICE}zl", "&7Co otrzymasz?", "&8- Wstaw twoje informacje...", "", "&aKliknij lewym, aby zakupic usluge!"))
                             .getItem(),
                     "Ranga VIP",
                     10,
                     21,
-                    List.of("say {PLAYER} skonfiguruj komende!")
+                    List.of("say {PLAYER} dzieki za kupno vipa!")
+            ),
+            new Product(
+                    new ItemBuilder(Material.DIAMOND_HELMET)
+                            .setName("&7Ranga: &6&lSVIP")
+                            .setLore(List.of("", "&7Koszt uslugi: &e{PRICE}zl", "&7Co otrzymasz?", "&8- Wstaw twoje informacje...", "", "&aKliknij lewym, aby zakupic usluge!"))
+                            .getItem(),
+                    "Ranga SVIP",
+                    10,
+                    22,
+                    List.of("say {PLAYER} dzieki za kupno svipa!")
+            ),
+            new Product(
+                    new ItemBuilder(Material.NETHERITE_HELMET)
+                            .setName("&7Ranga: &5&lELITA")
+                            .setLore(List.of("", "&7Koszt uslugi: &e{PRICE}zl", "&7Co otrzymasz?", "&8- Wstaw twoje informacje...", "", "&aKliknij lewym, aby zakupic usluge!"))
+                            .getItem(),
+                    "Ranga Elita",
+                    10,
+                    23,
+                    List.of("say {PLAYER} dzieki za kupno elity!")
             )
     );
 

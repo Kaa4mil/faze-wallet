@@ -33,7 +33,7 @@ public class WalletProductSerializer implements ObjectSerializer<Product> {
                 data.get("name", String.class),
                 data.get("cost", Double.class),
                 data.get("slot", Integer.class),
-                data.get("commands", ArrayList.class)
+                data.getAsList("commands", String.class)
         );
     }
 }

@@ -11,7 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.UUID;
+import java.util.Map;
 
 @RequiredArgsConstructor(onConstructor_ = @Inject)
 public class UserManagerImpl implements UserManager {
@@ -27,14 +27,17 @@ public class UserManagerImpl implements UserManager {
         this.userRepository.findOrCreate(player.getUniqueId(), player.getName()).thenAcceptAsync(user -> {
 
             if(user.getBalance() < product.getCost()) {
-                WalletUtil.sendMessage(player, this.messageConfig.getPriceIsHigher());
+                WalletUtil.sendMessage(player, this.messageConfig.getPriceIsHigher(), Map.of("PRICE", product.getCost() - user.getBalance()));
                 return;
             }
 
-            product.getCommands().forEach(command -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command
-                    .replace("{PLAYER}", player.getName())
-                    .replace("{NAME}", product.getServiceName())
-            ));
+            Bukkit.getOnlinePlayers().forEach(p -> {
+               this.messageConfig.getBuyMessages().forEach(message ->
+                       WalletUtil.sendMessage(p, message, Map.of(
+                               "SERVICE", product.getServiceName(),
+                               "PLAYER", player.getName()
+                       )));
+            });
 
         });
     }

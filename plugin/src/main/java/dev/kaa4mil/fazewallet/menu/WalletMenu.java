@@ -2,7 +2,6 @@ package dev.kaa4mil.fazewallet.menu;
 
 import dev.kaa4mil.fazewallet.config.CategoryConfig;
 import dev.kaa4mil.fazewallet.config.WalletConfig;
-import dev.kaa4mil.fazewallet.model.Product;
 import dev.kaa4mil.fazewallet.user.User;
 import dev.kaa4mil.fazewallet.user.UserManagerImpl;
 import dev.kaa4mil.fazewallet.user.UserRepository;
@@ -14,9 +13,10 @@ import dev.triumphteam.gui.guis.GuiItem;
 import eu.okaeri.injector.annotation.Inject;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Material;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 @RequiredArgsConstructor(onConstructor_ = @Inject)
@@ -42,14 +42,38 @@ public class WalletMenu implements Listener {
 
         this.walletConfig.getContents().forEach((slot, item) -> {
 
-            if(item.getItemMeta().getLore() != null) {
+            if (item.getItemMeta().getLore() != null) {
                 item = ItemBuilder.formatItem(item, (int) user.getBalance(), player.getName());
             }
 
             this.menu.setItem(slot, new GuiItem(item, event -> event.setCancelled(true)));
         });
 
-        this.categoryConfig.getCategories().forEach(category -> {
+        if (!this.walletConfig.isEnableCategories()) {
+
+            this.walletConfig.getProducts().forEach(product -> {
+
+                final ItemStack item = ItemBuilder.formatProduct(product.getItem(), product.getCost(), user.getBalance(), player.getName());
+
+                this.menu.setItem(product.getSlot(), new GuiItem(item, event -> {
+                    this.userManager.buyProduct(player, product);
+
+                    product.getCommands().forEach(command -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command
+                            .replace("{PLAYER}", player.getName())
+                    ));
+
+                    player.closeInventory();
+
+                    event.setCancelled(true);
+                }));
+
+                this.menu.open(player);
+            });
+
+            return;
+        }
+
+        this.categoryConfig.getCategories().forEach((name, category) -> {
 
             final Gui categoryMenu = Gui.gui(GuiType.CHEST)
                     .title(Component.text(ColorTransformer.fix(category.getTitle())))
@@ -58,18 +82,40 @@ public class WalletMenu implements Listener {
 
             menu.setItem(category.getSlot(), new GuiItem(category.getItem(), event -> {
 
-                for(Product product : category.getProducts()) {
-                    categoryMenu.setItem(product.getSlot(), new GuiItem(product.getItem(), e -> e.setCancelled(true)));
-                }
+                category.getContents().forEach((slot, item) -> {
+                    final ItemStack formatted = ItemBuilder.formatItem(item, user.getBalance(), player.getName());
+
+                    categoryMenu.setItem(slot, new GuiItem(formatted));
+                });
+
+                category.getProducts().forEach(product -> {
+                    final ItemStack item = ItemBuilder.formatProduct(product.getItem(), product.getCost(), user.getBalance(), player.getName());
+
+                    categoryMenu.setItem(product.getSlot(), new GuiItem(item, e -> {
+                        this.userManager.buyProduct(player, product);
+
+                        product.getCommands().forEach(command -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command
+                                .replace("{PLAYER}", player.getName())
+                        ));
+
+                        player.closeInventory();
+                        e.setCancelled(true);
+                    }));
+
+                });
+
+                categoryMenu.setItem(this.categoryConfig.getReturnButtonSlot(), new GuiItem(this.categoryConfig.getReturnButton(), e -> {
+                    menu.open(player);
+                    e.setCancelled(true);
+                }));
 
                 categoryMenu.open(player);
                 event.setCancelled(true);
             }));
 
+
+            this.menu.open(player);
         });
-
-
-        this.menu.open(player);
     }
 
 }

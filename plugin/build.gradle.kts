@@ -55,10 +55,9 @@ tasks.shadowJar {
 
     listOf(
         "eu.okaeri",
-        "org.jetbrains",
-        "net.kyori"
+        "net.kyote"
     ).forEach{ name ->
-        relocate(name, "dev.kaa4mil.libs.$name")
+        relocate(name, "dev.kaa4mil.library.$name")
     }
 
     minimize()

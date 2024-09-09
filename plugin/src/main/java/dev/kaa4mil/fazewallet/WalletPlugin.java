@@ -15,26 +15,31 @@ import dev.kaa4mil.fazewallet.serializer.WalletCategorySerializer;
 import dev.kaa4mil.fazewallet.serializer.WalletProductSerializer;
 import dev.kaa4mil.fazewallet.user.UserManagerImpl;
 import eu.okaeri.configs.yaml.bukkit.serdes.serializer.ItemStackSerializer;
+import lombok.Getter;
 
 public class WalletPlugin extends FazeBukkit {
 
     private WalletPersistenceImpl walletPersistence;
+
+    @Getter private WalletConfig walletConfig;
+    @Getter private MessageConfig messageConfig;
+    @Getter private CategoryConfig categoryConfig;
 
     @Override
     public void enable() {
 
         this.registerComponent(this);
 
-        final WalletConfig walletConfig = this.getConfigLoader().addConfiguration(WalletConfig.class, "config", this, registry -> {
+        this.walletConfig = this.getConfigLoader().addConfiguration(WalletConfig.class, "config", this, registry -> {
             registry.register(new FazeSerdes());
             registry.register(new WalletProductSerializer());
         });
 
         this.setDebug(walletConfig.isDebug());
 
-        final MessageConfig messageConfig = this.getConfigLoader().addConfiguration(MessageConfig.class, "message", this);
+        this.messageConfig = this.getConfigLoader().addConfiguration(MessageConfig.class, "message", this);
 
-        final CategoryConfig categoryConfig = this.getConfigLoader().addConfiguration(CategoryConfig.class, "category", this, registry -> {
+        this.categoryConfig = this.getConfigLoader().addConfiguration(CategoryConfig.class, "category", this, registry -> {
             registry.register(new ItemStackSerializer());
             registry.register(new WalletCategorySerializer());
             registry.register(new WalletProductSerializer());
