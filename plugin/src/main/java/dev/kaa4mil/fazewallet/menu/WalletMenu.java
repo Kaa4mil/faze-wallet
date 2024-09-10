@@ -1,11 +1,13 @@
 package dev.kaa4mil.fazewallet.menu;
 
 import dev.kaa4mil.fazewallet.config.CategoryConfig;
+import dev.kaa4mil.fazewallet.config.MessageConfig;
 import dev.kaa4mil.fazewallet.config.WalletConfig;
 import dev.kaa4mil.fazewallet.user.User;
 import dev.kaa4mil.fazewallet.user.UserManagerImpl;
 import dev.kaa4mil.fazewallet.user.UserRepository;
 import dev.kaa4mil.fazewallet.util.ItemBuilder;
+import dev.kaa4mil.fazewallet.util.WalletUtil;
 import dev.kaa4mil.util.ColorTransformer;
 import dev.triumphteam.gui.components.GuiType;
 import dev.triumphteam.gui.guis.Gui;
@@ -19,11 +21,15 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Map;
+import java.util.Objects;
+
 @RequiredArgsConstructor(onConstructor_ = @Inject)
 public class WalletMenu implements Listener {
 
     private final WalletConfig walletConfig;
     private final CategoryConfig categoryConfig;
+    private final MessageConfig messageConfig;
 
     private final UserManagerImpl userManager;
     private final UserRepository userRepository;
@@ -42,7 +48,7 @@ public class WalletMenu implements Listener {
 
         this.walletConfig.getContents().forEach((slot, item) -> {
 
-            if (item.getItemMeta().getLore() != null) {
+            if (Objects.requireNonNull(item.getItemMeta()).getLore() != null) {
                 item = ItemBuilder.formatItem(item, (int) user.getBalance(), player.getName());
             }
 
@@ -56,15 +62,21 @@ public class WalletMenu implements Listener {
                 final ItemStack item = ItemBuilder.formatProduct(product.getItem(), product.getCost(), user.getBalance(), player.getName());
 
                 this.menu.setItem(product.getSlot(), new GuiItem(item, event -> {
+
+                    player.closeInventory();
+                    event.setCancelled(true);
+
+                    if(user.getBalance() < product.getCost()) {
+                        WalletUtil.sendMessage(player, this.messageConfig.getPriceIsHigher(), Map.of("PRICE", product.getCost() - user.getBalance()));
+                        return;
+                    }
+
                     this.userManager.buyProduct(player, product);
 
                     product.getCommands().forEach(command -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command
                             .replace("{PLAYER}", player.getName())
                     ));
 
-                    player.closeInventory();
-
-                    event.setCancelled(true);
                 }));
 
                 this.menu.open(player);
@@ -92,14 +104,21 @@ public class WalletMenu implements Listener {
                     final ItemStack item = ItemBuilder.formatProduct(product.getItem(), product.getCost(), user.getBalance(), player.getName());
 
                     categoryMenu.setItem(product.getSlot(), new GuiItem(item, e -> {
+
+                        player.closeInventory();
+                        event.setCancelled(true);
+
+                        if(user.getBalance() < product.getCost()) {
+                            WalletUtil.sendMessage(player, this.messageConfig.getPriceIsHigher(), Map.of("PRICE", product.getCost() - user.getBalance()));
+                            return;
+                        }
+
                         this.userManager.buyProduct(player, product);
 
                         product.getCommands().forEach(command -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command
                                 .replace("{PLAYER}", player.getName())
                         ));
 
-                        player.closeInventory();
-                        e.setCancelled(true);
                     }));
 
                 });

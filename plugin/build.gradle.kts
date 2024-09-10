@@ -17,6 +17,11 @@ repositories {
     maven {
         url = uri("https://storehouse.okaeri.eu/repository/maven-public/")
     }
+
+    maven {
+        url = uri("https://repo.extendedclip.com/content/repositories/placeholderapi/")
+    }
+
 }
 
 dependencies {
@@ -40,6 +45,9 @@ dependencies {
     implementation("eu.okaeri:okaeri-persistence-jdbc:3.0.1-beta.2")
     implementation("eu.okaeri:okaeri-persistence-flat:3.0.1-beta.2")
 
+    // placeholderapi
+    compileOnly("me.clip:placeholderapi:2.11.6")
+
     // lombok
     val lombok = "1.18.34"
     compileOnly("org.projectlombok:lombok:$lombok")
@@ -50,12 +58,12 @@ dependencies {
 }
 
 tasks.shadowJar {
-    archiveFileName.set("Faze-Wallet-1.0-Synchronized.jar")
-    destinationDirectory.set(file("D:\\Program Files\\bukkit server\\plugins"))
+    archiveFileName.set("Faze-Wallet-1.2-Synchronized.jar")
 
     listOf(
         "eu.okaeri",
-        "net.kyote"
+        "net.kyori",
+        "org.jetbrains"
     ).forEach{ name ->
         relocate(name, "dev.kaa4mil.library.$name")
     }

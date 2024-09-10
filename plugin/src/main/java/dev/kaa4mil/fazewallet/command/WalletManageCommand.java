@@ -11,6 +11,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -63,21 +64,20 @@ public class WalletManageCommand extends Command {
         final double amount = Double.parseDouble(args[2]);
 
         switch (args[0]) {
-            case "add":
+            case "add" -> {
                 this.userManager.addBalance(player, amount);
                 WalletUtil.sendMessage(sender, this.messageConfig.getAddedBalanceMessage(), Map.of("PLAYER", args[1], "AMOUNT", amount));
-                break;
-            case "remove":
+            }
+            case "remove" -> {
                 this.userManager.removeBalance(player, amount);
                 WalletUtil.sendMessage(sender, this.messageConfig.getRemoveBalanceMessage(), Map.of("PLAYER", args[1], "AMOUNT", amount));
-                break;
-            case "set":
+            }
+            case "set" -> {
                 this.userManager.setBalance(player, amount);
                 WalletUtil.sendMessage(sender, this.messageConfig.getSetBalanceMessage(), Map.of("PLAYER", args[1], "AMOUNT", amount));
-                break;
-            default:
-                WalletUtil.sendMessage(sender, "&cPoprawne uzycie: &4/awallet <add/remove/set> <gracz> <wartosc>");
-                break;
+            }
+            default ->
+                    WalletUtil.sendMessage(sender, "&cPoprawne uzycie: &4/awallet <add/remove/set/reload> <gracz> <wartosc>");
         }
 
         return true;
@@ -86,9 +86,19 @@ public class WalletManageCommand extends Command {
     @NotNull
     @Override
     public List<String> tabComplete(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) throws IllegalArgumentException {
+
         if(args.length == 1) {
             return List.of("add", "remove", "set", "reload");
         }
+
+        if(args.length == 2) {
+            return Collections.singletonList(sender.getName());
+        }
+
+        if(args.length == 3) {
+            return List.of("1", "5", "20", "30");
+        }
+
         return List.of();
     }
 }

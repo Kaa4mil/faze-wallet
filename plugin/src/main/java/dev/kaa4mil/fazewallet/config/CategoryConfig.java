@@ -5,6 +5,9 @@ import dev.kaa4mil.fazewallet.model.Product;
 import dev.kaa4mil.fazewallet.util.ItemBuilder;
 import eu.okaeri.configs.OkaeriConfig;
 import eu.okaeri.configs.annotation.Comment;
+import eu.okaeri.configs.annotation.NameModifier;
+import eu.okaeri.configs.annotation.NameStrategy;
+import eu.okaeri.configs.annotation.Names;
 import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -15,6 +18,8 @@ import java.util.List;
 import java.util.Map;
 
 @Getter
+@SuppressWarnings("all")
+@Names(strategy = NameStrategy.HYPHEN_CASE, modifier = NameModifier.TO_LOWER_CASE)
 public class CategoryConfig extends OkaeriConfig {
 
     public Map<String, Category> categories = new HashMap<>(Map.of(
@@ -30,7 +35,7 @@ public class CategoryConfig extends OkaeriConfig {
                             new Product(
                                     new ItemBuilder(Material.TRIPWIRE_HOOK)
                                             .setName("&7Klucz: &5&lEPICKI")
-                                            .setLore(List.of("", "&7Koszt uslugi: &e{PRICE}zl", "&7Co otrzymasz?", "&8- Wstaw twoje informacje...", "", "&aKliknij, aby zakupic usluge!"))
+                                            .setLore(List.of("", "&7Koszt uslugi: &e{PRICE}zl", "&7Co otrzymasz?", "&8- Wstaw twoje informacje...", "", "&aKliknij lewym, aby zakupic usluge!"))
                                             .getItem(),
                                     "Klucz Epicki",
                                     5,
@@ -40,20 +45,20 @@ public class CategoryConfig extends OkaeriConfig {
                             new Product(
                                     new ItemBuilder(Material.TRIPWIRE_HOOK)
                                             .setName("&7Klucz: &6&lLEGENDARNY")
-                                            .setLore(List.of("", "&7Koszt uslugi: &e{PRICE}zl", "&7Co otrzymasz?", "&8- Wstaw twoje informacje...", "", "&aKliknij, aby zakupic usluge!"))
+                                            .setLore(List.of("", "&7Koszt uslugi: &e{PRICE}zl", "&7Co otrzymasz?", "&8- Wstaw twoje informacje...", "", "&aKliknij lewym, aby zakupic usluge!"))
                                             .getItem(),
                                     "Klucz Legendarny",
-                                    5,
+                                    10,
                                     22,
                                     List.of("say {PLAYER} dzieki za kupno klucza!")
                             ),
                             new Product(
                                     new ItemBuilder(Material.TRIPWIRE_HOOK)
                                             .setName("&7Klucz: &c&lMITYCZNY")
-                                            .setLore(List.of("", "&7Koszt uslugi: &e{PRICE}zl", "&7Co otrzymasz?", "&8- Wstaw twoje informacje...", "", "&aKliknij, aby zakupic usluge!"))
+                                            .setLore(List.of("", "&7Koszt uslugi: &e{PRICE}zl", "&7Co otrzymasz?", "&8- Wstaw twoje informacje...", "", "&aKliknij lewym, aby zakupic usluge!"))
                                             .getItem(),
                                     "Klucz Mityczny",
-                                    5,
+                                    15,
                                     23,
                                     List.of("say {PLAYER} dzieki za kupno klucza!")
                             )
@@ -61,23 +66,65 @@ public class CategoryConfig extends OkaeriConfig {
                     Map.of()
             ),
             "rangi", new Category(
-                    new ItemBuilder(Material.TRIPWIRE_HOOK)
-                            .setName("&7Kategoria: &cRangi")
+                    new ItemBuilder(Material.TNT)
+                            .setName("&7Kategoria: &c&lRangi")
                             .setLore(List.of("&eNacisnij, aby przejsc do kategorii!"))
                             .getItem(),
                     54,
-                    21,
+                    22,
                     "&c&lRangi",
-                    Collections.singletonList(
+                    List.of(
                             new Product(
-                                    new ItemBuilder(Material.TRIPWIRE_HOOK)
-                                            .setName("&7Klucz: &6&lLEGENDARNY")
-                                            .setLore(List.of("", "&7Koszt uslugi: &e{PRICE}zl", "&7Co otrzymasz?", "&8- Wstaw twoje informacje...", "", "&aKliknij, aby zakupic usluge!"))
+                                    new ItemBuilder(Material.IRON_HELMET)
+                                            .setName("&7Ranga: &e&LVIP &8(&7Na tryb&8)")
+                                            .setLore(List.of("", "&7Koszt uslugi: &e{PRICE}zl", "&7Co otrzymasz?", "&8- Wstaw twoje informacje...", "", "&aKliknij lewym, aby zakupic usluge!"))
                                             .getItem(),
-                                    "Klucz Legendarny",
-                                    5,
+                                    "Ranga VIP",
+                                    10,
                                     21,
-                                    List.of("say {PLAYER} dzieki za kupno klucza!")
+                                    List.of("say {PLAYER} dzieki za kupno rangi!")
+                            ),
+                            new Product(
+                                    new ItemBuilder(Material.GOLDEN_HELMET)
+                                            .setName("&7Ranga: &6&LSVIP &8(&7Na tryb&8)")
+                                            .setLore(List.of("", "&7Koszt uslugi: &e{PRICE}zl", "&7Co otrzymasz?", "&8- Wstaw twoje informacje...", "", "&aKliknij lewym, aby zakupic usluge!"))
+                                            .getItem(),
+                                    "Ranga SVIP",
+                                    20,
+                                    22,
+                                    List.of("say {PLAYER} dzieki za kupno rangi!")
+                            ),
+                            new Product(
+                                    new ItemBuilder(Material.NETHERITE_HELMET)
+                                            .setName("&7Ranga: &5&lElita &8(&7Na tryb&8)")
+                                            .setLore(List.of("", "&7Koszt uslugi: &e{PRICE}zl", "&7Co otrzymasz?", "&8- Wstaw twoje informacje...", "", "&aKliknij lewym, aby zakupic usluge!"))
+                                            .getItem(),
+                                    "Ranga Elita",
+                                    30,
+                                    23,
+                                    List.of("say {PLAYER} dzieki za kupno rangi!")
+                            )
+                    ),
+                    Map.of()
+            ),
+            "waluty", new Category(
+                    new ItemBuilder(Material.PAPER)
+                            .setName("&7Kategoria: &a&lPrzedmioty serwerowe")
+                            .setLore(List.of("&eNacisnij, aby przejsc do kategorii!"))
+                            .getItem(),
+                    54,
+                    23,
+                    "&c&lRangi",
+                    List.of(
+                            new Product(
+                                    new ItemBuilder(Material.DIAMOND_SWORD)
+                                            .setName("&b&lDiamentowy miecz")
+                                            .setLore(List.of("", "&7Koszt uslugi: &e{PRICE}zl", "&7Co otrzymasz?", "&8- Wstaw twoje informacje...", "", "&aKliknij lewym, aby zakupic usluge!"))
+                                            .getItem(),
+                                    "Diamentowy Miecz",
+                                    2,
+                                    22,
+                                    List.of("say {PLAYER} dzieki za kupno miecza!", "give {PLAYER} diamond_sword 1")
                             )
                     ),
                     Map.of()
@@ -90,6 +137,6 @@ public class CategoryConfig extends OkaeriConfig {
             .setLore(List.of("&eNacisnij, aby wrocic do menu glownego!"))
             .getItem();
 
-    public int returnButtonSlot = 49;
+    public int returnButtonSlot = 40;
 
 }

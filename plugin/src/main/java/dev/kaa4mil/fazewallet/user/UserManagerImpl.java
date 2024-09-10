@@ -25,12 +25,6 @@ public class UserManagerImpl implements UserManager {
     @Override
     public void buyProduct(@NotNull Player player, @NotNull Product product) {
         this.userRepository.findOrCreate(player.getUniqueId(), player.getName()).thenAcceptAsync(user -> {
-
-            if(user.getBalance() < product.getCost()) {
-                WalletUtil.sendMessage(player, this.messageConfig.getPriceIsHigher(), Map.of("PRICE", product.getCost() - user.getBalance()));
-                return;
-            }
-
             Bukkit.getOnlinePlayers().forEach(p -> {
                this.messageConfig.getBuyMessages().forEach(message ->
                        WalletUtil.sendMessage(p, message, Map.of(
@@ -39,6 +33,7 @@ public class UserManagerImpl implements UserManager {
                        )));
             });
 
+            this.removeBalance(player, product.getCost());
         });
     }
 

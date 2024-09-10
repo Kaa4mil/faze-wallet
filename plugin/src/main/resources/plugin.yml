@@ -1,5 +1,6 @@
 name: Faze-Wallet-Synchronized
 main: dev.kaa4mil.fazewallet.WalletPlugin
-version: 1.0-InDEV
+version: 1.2
 authors: [Kaa4mil]
+softdepend: [PlaceholderAPI]
 api-version: 1.16

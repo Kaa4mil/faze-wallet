@@ -18,7 +18,8 @@ import java.util.stream.Stream;
 @Getter
 @Header("## FazeDev-Wallet-Synchronized ##")
 @Header("## Author: Kaa4mil ##")
-@Names(strategy = NameStrategy.IDENTITY, modifier = NameModifier.TO_LOWER_CASE)
+@SuppressWarnings("all")
+@Names(strategy = NameStrategy.HYPHEN_CASE, modifier = NameModifier.TO_LOWER_CASE)
 public class WalletConfig extends OkaeriConfig {
 
     public PersistenceField persistenceField = new PersistenceField();
@@ -52,7 +53,7 @@ public class WalletConfig extends OkaeriConfig {
                             .setLore(List.of("", "&7Koszt uslugi: &e{PRICE}zl", "&7Co otrzymasz?", "&8- Wstaw twoje informacje...", "", "&aKliknij lewym, aby zakupic usluge!"))
                             .getItem(),
                     "Ranga SVIP",
-                    10,
+                    20,
                     22,
                     List.of("say {PLAYER} dzieki za kupno svipa!")
             ),
@@ -62,7 +63,7 @@ public class WalletConfig extends OkaeriConfig {
                             .setLore(List.of("", "&7Koszt uslugi: &e{PRICE}zl", "&7Co otrzymasz?", "&8- Wstaw twoje informacje...", "", "&aKliknij lewym, aby zakupic usluge!"))
                             .getItem(),
                     "Ranga Elita",
-                    10,
+                    30,
                     23,
                     List.of("say {PLAYER} dzieki za kupno elity!")
             )

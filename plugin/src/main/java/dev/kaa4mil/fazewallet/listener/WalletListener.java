@@ -1,6 +1,5 @@
 package dev.kaa4mil.fazewallet.listener;
 
-import dev.kaa4mil.fazewallet.user.User;
 import dev.kaa4mil.fazewallet.user.UserRepository;
 import eu.okaeri.injector.annotation.Inject;
 import lombok.RequiredArgsConstructor;

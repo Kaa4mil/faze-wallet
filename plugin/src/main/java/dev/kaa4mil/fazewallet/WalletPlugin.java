@@ -11,6 +11,7 @@ import dev.kaa4mil.fazewallet.config.WalletConfig;
 import dev.kaa4mil.fazewallet.listener.WalletListener;
 import dev.kaa4mil.fazewallet.menu.WalletMenu;
 import dev.kaa4mil.fazewallet.persistence.WalletPersistenceImpl;
+import dev.kaa4mil.fazewallet.placeholder.WalletPlaceholder;
 import dev.kaa4mil.fazewallet.serializer.WalletCategorySerializer;
 import dev.kaa4mil.fazewallet.serializer.WalletProductSerializer;
 import dev.kaa4mil.fazewallet.user.UserManagerImpl;
@@ -57,6 +58,11 @@ public class WalletPlugin extends FazeBukkit {
 
         final WalletMenu walletMenu = this.createInstance(WalletMenu.class);
         this.registerComponent(walletMenu);
+
+        if(this.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+            final WalletPlaceholder walletPlaceholder = this.createInstance(WalletPlaceholder.class);
+            walletPlaceholder.register();
+        }
 
         this.getCommandLoader().loadCommands(
                 this.createInstance(WalletOpenCommand.class),
